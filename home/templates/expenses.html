@@ -1,0 +1,117 @@
+{% load static %} <!-- Se cargan archivos/elementos dentro del codigo -->
+{% block start %} 
+
+<!-- Favicons -->
+<link href="/static/img/favicon.png" rel="icon">
+<link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Google Fonts -->
+<link href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<style> 
+.text { 
+	color: green; 
+	font-weight: bold; 
+	font-family: 'Times New Roman', Times, serif; 
+}
+.text { 
+	color: green; 
+	font-weight: bold; 
+	font-family: 'Times New Roman', Times, serif; 
+} 
+.ok { 
+	color: white; 
+	text-decoration: none; 
+} 
+.ok:hover { 
+	color: white; 
+	text-decoration: none; 
+} 
+</style> 
+
+<div class="container mt-5 col-8"> 
+
+	<form id="opform" class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data"> 
+		{% csrf_token %} 
+		<br> 
+		<h4> Introduce las operaciones</h4> 
+		<hr> 
+		
+		<div class="form-group"> 
+		<label for="category">Titulo de la operacion </label> 
+		<input type="text" name="name" class="form-control"required> 
+		</div> 
+		<div class="form-group"> 
+		<label for="amount">Monto</label> 
+		<input name="qty" type="number" class="form-control"required> 
+		</div> 
+		<div class="form-group"> 
+			<label for="date">Fecha</label> 
+			<input type="date" name="date" class="form-control"  required>
+		</div> 
+		<div class="form-group">
+			<label >Seleccione la Categoria</label><br>
+			<select class="category" name="category" required>
+		  	<option value="Comida">Comida y Bebidas</option>
+		  	<option value="Transporte">Transporte</option>
+		  	<option value="Compras">Compras</option>
+			<option value="Servicios">Servicios</option>
+			<option value="Entretenimiento">Entretenimiento</option>
+			<option value="Otro">Otros</option>
+				
+			</select><br>
+		</div>
+		<div class="form-group">
+			<label >Tipo de operacion</label><br>
+			<select name="type" required>
+		  	<option value="Ingreso">Ingreso</option>
+		  	<option value="Egreso">Egreso</option>
+				
+			</select><br>
+		</div>
+		<button type="submit" class="btn btn-success">Guardar</button> 
+	</form> 
+
+	<div class="class mt-5"> 
+		<form  action=""> 
+		<button class="btn btn-primary"> <a class="ok" href="{% url 'csv' %}">Exportar en formato CSV </a></button> 
+		<button class="btn btn-primary"> <a class="ok" href="{% url 'pdf' %}">Exportar en formato PDF </a></button> 
+		<button class="btn btn-danger"> <a class="ok" href="{% url 'logout' %}">Cerrar sesion </a></button>
+		<button class="btn btn-warning"> <a class="ok" href="{% url 'home' %}">Volver al menu</a></button> 
+		</form> 
+
+		<table class="table mt-8"> 
+			<thead> 
+				<tr> 
+					<th scope="col"># </th> 
+					<th scope="col">Descripcion</th> 
+					<th scope="col">Monto </th>
+					<th scope="col">Fecha </th>
+					<th scope="col">Tipo </th>
+					<th scope="col">Categoria </th>
+					<th scope="col">Acciones</th> 
+				</tr> 
+			</thead> 
+			<tbody> 
+				{% for expense in expenses %} 
+				<tr> 
+					<th scope="row">{{forloop.counter}}</th> 
+					<td>{{expense.name}}</td> 
+					<td>${{expense.qty}}</td> 
+					<td>{{expense.date}}</td>
+					<td>{{expense.type}}</td> 
+					<td>{{expense.category}}</td> 
+
+					<td> 
+						<a href="/delete_expense/{{expense.id }}" class="btn btn-danger m-2">Eliminar </a> 
+						<a href="/update_expense/{{expense.id }}" class="btn btn-success">Editar </a> 
+					</td> 
+				</tr> 
+				{% endfor %} 
+			</tbody> 
+		</table> 
+	</div> 
+{% endblock %} 
